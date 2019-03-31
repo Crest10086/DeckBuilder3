@@ -16,7 +16,7 @@ namespace OCG.LuceneExtend
 {
     public class MyLucene
     {
-        private static Analyzer analyzer = null;
+        private static PerFieldAnalyzerWrapper analyzer = null;
         private static IndexWriter indexReWriter = null;
         private static IndexWriter indexWriter = null;
         private static IndexSearcher indexSearcher = null;
@@ -29,8 +29,12 @@ namespace OCG.LuceneExtend
         {
             if (analyzer == null)
             {
-                analyzer = new PerFieldAnalyzerWrapper(new StandardAnalyzer(LuceneVersion));
+                
+                Dictionary<string, Analyzer> analyzers = new Dictionary<string, Analyzer>();
+                analyzers.Add("level", new StandardAnalyzer(LuceneVersion));
 
+
+                analyzer = new PerFieldAnalyzerWrapper(new StandardAnalyzer(LuceneVersion), analyzers);
             }
             return analyzer;
         }
@@ -90,6 +94,7 @@ namespace OCG.LuceneExtend
                     { "japName", 2 },
                     { "EnName", 2 },
                     { "effect", 0.5f },
+                    { "level", 1 },
                 };
         }
 

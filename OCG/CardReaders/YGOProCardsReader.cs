@@ -99,7 +99,7 @@ namespace OCG.CardReaders
             }
 
             var ce = (CardElement)GetFieldInt(reader, "attribute");
-            card.Element = ce.GetDesc<CardElement>() ?? "";
+            card.Attribute = ce.GetDesc<CardElement>() ?? "";
 
             var cr = (CardRace)GetFieldInt(reader, "race");
             card.Race = cr.GetDesc<CardRace>() ?? "";

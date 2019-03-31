@@ -21,6 +21,10 @@ using OCG.DataStructure;
 using OCG.CardReaders;
 using OCG.CardSavers;
 using OCG.Search;
+using OCG.LuceneExtend;
+using Lucene.Net.Search;
+using Lucene.Net.QueryParsers;
+using Lucene.Net.QueryParsers.Classic;
 
 namespace OCG
 {
@@ -45,15 +49,20 @@ namespace OCG
             {
                 var ygoReader = new YGOProCardsReader(ofd.FileName);
                 var cards = ygoReader.Read();
+                var cardLibrary = new CardLibrary(cards);
+                var preader = new OurOCGPatchReader(Global.PatchFile);
+                preader.PatchCards(cardLibrary);
+                cardLibrary.SortCards();
 
                 var luceneSaver = new LuceneCardsSaver(Global.IndexPath);
-                luceneSaver.Save(cards);
+                luceneSaver.Save(cardLibrary.GetCards());
+                var cards3 = cardLibrary.GetCards();
 
-                var luceneReader = new LuceneCardsReader(Global.IndexPath);
-                var cards2 = luceneReader.Read();
+                //var luceneReader = new LuceneCardsReader(Global.IndexPath);
+                //var cards2 = luceneReader.Read();
        
 
-                ObservableCollection<Card> cardList = new ObservableCollection<Card>(cards2);
+                ObservableCollection<Card> cardList = new ObservableCollection<Card>(cards3);
                 listview1.ItemsSource = cardList;
             }
         }
@@ -126,6 +135,7 @@ namespace OCG
         {
             RichText1.Document.Blocks.Clear();
 
+            /*
             int testTimes = 100000000;
             int[] arr = new int[testTimes];
             for (int i = 0; i < arr.Length; i++)
@@ -162,9 +172,24 @@ namespace OCG
             }
 
             watch.Stop();
-
             RichText1.AppendText("方法2：" + watch.ElapsedMilliseconds.ToString() + Environment.NewLine + Environment.NewLine);
+            */
 
+            //CardType ct = new CardType();
+            //ct.FullType = (FullCardTypes)8225;
+
+            /*
+            Query query2 = NumericRangeQuery.NewInt32Range("level", 0, 4, false, true);
+            QueryParser parser = new QueryParser(MyLucene.LuceneVersion, "level", MyLucene.GetCardAnalyzer());//new MultiFieldQueryParser(MyLucene.LuceneVersion, MyLucene.GetSearchField(), MyLucene.GetCardAnalyzer(), MyLucene.GetFieldBoosts());
+            var query = parser.Parse(query2.ToString());
+            var searcher = OCG.LuceneExtend.MyLucene.GetIndexSearcher();
+            TopDocs topDocs = searcher.Search(query, int.MaxValue);
+            var total = topDocs.TotalHits;
+            */
+
+            string s = Global.CardLibrary.GetCardByName("青眼白龙").Text;
+            int i = System.Text.Encoding.Default.GetByteCount(s);
+            RichText1.AppendText(i.ToString());
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -177,8 +202,17 @@ namespace OCG
         private void Listview1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Card card = (Card)listview1.SelectedItem;
-            RichText1.Document.Blocks.Clear();
-            RichText1.AppendText(card.Effect);
+            if (card != null)
+            {
+                RichText1.Document.Blocks.Clear();
+                RichText1.AppendText(card.Text);
+            }
+        }
+
+        private void SearchText_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                Button_Click_2(null, null);
         }
     }
 }

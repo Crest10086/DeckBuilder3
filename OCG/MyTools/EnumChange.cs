@@ -63,6 +63,19 @@ namespace MyTools
         }
 
         //字符串转枚举值
+        public static T ParseEnumOrDefault<T>(this string description, T defValue = default(T)) where T : struct, IConvertible
+        {
+            try
+            {
+                return ParseEnum<T>(description);
+            }
+            catch
+            {
+                return Enum.TryParse<T>(description, out var enumType) ? enumType : defValue;
+            }
+        }
+
+        //字符串转枚举值
         public static bool TryParseEnum<T>(this string description, out T enumType) where T : struct, IConvertible
         {
             try
@@ -73,7 +86,6 @@ namespace MyTools
             catch
             {
                 enumType = default(T);
-
                 return Enum.TryParse<T>(description, out enumType);
             }
         }

@@ -23,32 +23,35 @@ namespace OCG.Search
         public Card this[string name] => GetCardByName(name);
         public int Count => cards.Length;
 
-        public CardLibrary(string indexPath)
+        public CardLibrary(Card[] cards)
         {
-            LoadCards(indexPath);
+            this.cards = cards;
+            RefreshHtCards();
         }
 
-        private void LoadCards(string indexPath)
+        private void RefreshHtCards()
         {
-            var reader = new LuceneCardsReader(indexPath);
-            cards = reader.Read();
             htcards.Clear();
             for (int i = 0; i < cards.Length; i++)
+            {
+                cards[i].Id = i;
                 htcards.Add(cards[i].Name, cards[i]);
+            }
         }
 
         public Card[] Search(string queryString = null, SorterBuilder sorterBuilder = null)
         {
-            Query query = null;
-            if (string.IsNullOrWhiteSpace(queryString))
-                query = new MatchAllDocsQuery();
-            else
-            {
-                var parser = new MultiFieldQueryParser(MyLucene.LuceneVersion, MyLucene.GetSearchField(), MyLucene.GetCardAnalyzer(), MyLucene.GetFieldBoosts());
-                query = parser.Parse(queryString);
-            }
             try
             {
+                Query query = null;
+                if (string.IsNullOrWhiteSpace(queryString))
+                    query = new MatchAllDocsQuery();
+                else
+                {
+                    var parser = new MultiFieldQueryParser(MyLucene.LuceneVersion, MyLucene.GetSearchField(), MyLucene.GetCardAnalyzer(), MyLucene.GetFieldBoosts());
+                    query = parser.Parse(queryString);
+                }
+
                 var searcher = MyLucene.GetIndexSearcher();
                 TopDocs topDocs = sorterBuilder == null
                     ? searcher.Search(query, int.MaxValue)
@@ -66,6 +69,34 @@ namespace OCG.Search
             }
         }
 
+        public Card[] GetCards() => cards;
+
+        public void SortCards()
+        {
+            var newcards = new List<Card>(cards);
+            newcards.Sort((x, y) => 
+            {
+                int i = x.CreateTime.CompareTo(y.CreateTime);
+                if (i != 0)
+                    return i;
+
+                i = x.CardType.BaseType.CompareTo(y.CardType.BaseType);
+                if (i != 0)
+                    return i;
+
+                i = x.CardType.SubType.CompareTo(y.CardType.SubType);
+                if (i != 0)
+                    return i;
+
+                return x.Name.CompareTo(y.Name);
+
+            });
+            //newcards.Sort((x, y) => x.CreateTime.CompareTo(y.CreateTime));
+            //newcards.Sort((x, y) => x.UpdateTime.CompareTo(y.UpdateTime));
+            cards = newcards.ToArray();
+            RefreshHtCards();
+        }
+
         /// <summary>
         /// 根据索引返回卡片。考虑到性能，这里不做索引越界检查，调用方需自行处理
         /// </summary>
@@ -79,6 +110,27 @@ namespace OCG.Search
         /// </summary>
         /// <param name="name">卡片名</param>
         /// <returns>卡片</returns>
-        public Card GetCardByName(string name) => htcards[name]; 
+        public Card GetCardByName(string name) => htcards.ContainsKey(name) ? htcards[name] : null;
+
+        public Card GetCardByCode(string code)
+        {
+            string scode = code.PadLeft(8, '0');
+
+            int count = cards.Length;
+
+            foreach (var card in cards)
+            {
+                if (card.Code == scode)
+                    return card;
+            }
+
+            foreach (var card in cards)
+            {
+                if (card.Code.Contains(code))
+                    return card;
+            }
+
+            return null;
+        }
     }
 }

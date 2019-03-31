@@ -5,36 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OCG"
         mc:Ignorable="d"
-        Title="MainWindow" Height="490.914" Width="1087.069">
+        Title="MainWindow" Height="833.707" Width="1435.505">
     <Grid>
-        <Button x:Name="Btn1" Content="Button" HorizontalAlignment="Left" Margin="33,408,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <ListView x:Name="listview1" HorizontalAlignment="Left" Height="312" Margin="33,65,0,0" VerticalAlignment="Top" Width="467" SelectionChanged="Listview1_SelectionChanged">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="682*"/>
+            <ColumnDefinition Width="397*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="Btn1" Content="重建索引" HorizontalAlignment="Left" Margin="37,752,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <ListView x:Name="listview1" HorizontalAlignment="Left" Height="656" Margin="33,65,0,0" VerticalAlignment="Top" Width="954" SelectionChanged="Listview1_SelectionChanged" Grid.ColumnSpan="2">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="卡名" DisplayMemberBinding="{Binding Path=Name}"/>
+                    <GridViewColumn Header="日文名" DisplayMemberBinding="{Binding Path=JapName}"/>
                     <GridViewColumn Header="卡片类型" DisplayMemberBinding="{Binding Path=CardType.ShortText}"/>
                     <GridViewColumn Header="种族" DisplayMemberBinding="{Binding Path=Race}"/>
-                    <GridViewColumn Header="属性" DisplayMemberBinding="{Binding Path=Element}"/>
+                    <GridViewColumn Header="属性" DisplayMemberBinding="{Binding Path=Attribute}"/>
                     <GridViewColumn Header="星级" DisplayMemberBinding="{Binding Path=LevelText}"/>
                     <GridViewColumn Header="攻击" DisplayMemberBinding="{Binding Path=Atk}"/>
-                    <GridViewColumn Header="防御" DisplayMemberBinding="{Binding Path=Def}"/>
+                    <GridViewColumn Header="防御" DisplayMemberBinding="{Binding Path=DefText}"/>
                     <GridViewColumn Header="LINK" DisplayMemberBinding="{Binding Path=Link}"/>
-                    <GridViewColumn Header="卡片密码" DisplayMemberBinding="{Binding Path=Cheatcode}"/>
+                    <GridViewColumn Header="卡片密码" DisplayMemberBinding="{Binding Path=Code}"/>
                     <GridViewColumn Header="编号" DisplayMemberBinding="{Binding Path=Id}"/>
+                    <GridViewColumn Header="创建时间" DisplayMemberBinding="{Binding Path=CreateTime}"/>
+                    <GridViewColumn Header="更新时间" DisplayMemberBinding="{Binding Path=UpdateTime}"/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="Btn2" Content="Button" HorizontalAlignment="Left" Margin="537,414,0,0" VerticalAlignment="Top" Width="75" Click="Btn2_Click" RenderTransformOrigin="1.855,0.587"/>
-        <RichTextBox x:Name="RichText1" HorizontalAlignment="Left" Height="312" Margin="537,65,0,0" VerticalAlignment="Top" Width="507">
+        <Button x:Name="Btn2" Content="Button" HorizontalAlignment="Left" Margin="541,752,0,0" VerticalAlignment="Top" Width="75" Click="Btn2_Click" RenderTransformOrigin="1.855,0.587"/>
+        <RichTextBox x:Name="RichText1" HorizontalAlignment="Left" Height="656" Margin="125,65,0,0" VerticalAlignment="Top" Width="342" Grid.Column="1">
             <FlowDocument>
                 <Paragraph>
                     <Run Text="RichTextBox"/>
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="250,413,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
-        <TextBox x:Name="SearchText" HorizontalAlignment="Left" Height="26" Margin="33,21,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="370"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="425,21,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_2"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="254,751,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
+        <TextBox x:Name="SearchText" HorizontalAlignment="Left" Height="26" Margin="33,21,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="844" PreviewKeyDown="SearchText_PreviewKeyDown"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="0,25,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_2" Grid.Column="1"/>
 
     </Grid>
 </Window>

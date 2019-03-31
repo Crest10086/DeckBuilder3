@@ -55,7 +55,19 @@ namespace OCG.CardReaders
                     Effect = GetFieldString(doc, "effect"),
                     CodeList = GetFieldString(doc, "code"),
                     Code = GetFieldString(doc, "code2"),
-                    AtkValue = GetFieldString(doc, "atkValue").ParseIntOrDefault()
+                    CardRule = GetFieldString(doc, "rule").ParseEnumOrDefault<CardRule>(CardRule.TYPE_OT),
+                    Alias = GetFieldString(doc, "alias"),
+                    Level = GetFieldInt(doc, "level"),
+                    PendulumL = GetFieldInt(doc, "pendL"),
+                    PendulumR = GetFieldInt(doc, "pendR"),
+                    Attribute = GetFieldString(doc, "attr"),
+                    Race = GetFieldString(doc, "race"),
+                    CardType = new CardType() { FullType = (FullCardTypes)GetFieldInt(doc, "cardType2") },
+                    AtkValue = GetFieldInt(doc, "atk"),
+                    Atk = GetFieldString(doc, "atk2"),
+                    DefValue = GetFieldInt(doc, "def"),
+                    Def = GetFieldString(doc, "def2"),
+                    Link = GetFieldString(doc, "link"),
                 };
                 cards.Add(card);
                 invoker?.Invoke(total, count);
@@ -70,7 +82,7 @@ namespace OCG.CardReaders
 
         private int GetFieldInt(Document doc, string fieldName, int defValue = int.MinValue)
         {
-            return doc.GetField(fieldName)?.GetInt32Value() ?? defValue;
+            return doc.GetField(fieldName)?.GetStringValue()?.Trim()?.ParseIntOrDefault() ?? defValue;
         }
     }
 }

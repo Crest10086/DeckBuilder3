@@ -15,7 +15,7 @@ namespace OCG.DataStructure
         [Description("")] TYPE_NONE = 0,
         [Description("OCG")] TYPE_OCG = 1,
         [Description("TCG")] TYPE_TCG = 2,
-        [Description("O&T")] TYPE_OT = 3,
+        [Description("OT")] TYPE_OT = 3,
         [Description("DIY")] TYPE_DIY = 4
     };
 

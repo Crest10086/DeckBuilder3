@@ -83,7 +83,7 @@ namespace OCG.CardReaders
             }
             //Task.WaitAll(tasks);
 
-            var cards = cardlist.OrderBy(card => card.Createtime).ToArray<Card>();
+            var cards = cardlist.OrderBy(card => card.CreateTime).ToArray<Card>();
 
             return cards;
         }
@@ -150,7 +150,7 @@ namespace OCG.CardReaders
                 //sCardType = obj["sCardType"].ToString(),
                 CodeList = obj["password"].ToString(),
                 Effect = obj["desc"].ToString(),
-                Createtime = DateTime.Parse(obj["created_at"].ToString())
+                CreateTime = DateTime.Parse(obj["created_at"].ToString())
             };
 
             return card;
