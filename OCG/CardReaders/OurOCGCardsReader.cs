@@ -29,16 +29,16 @@ namespace OCG.CardReaders
             con.Open();
 
             SQLiteCommand dcc = new SQLiteCommand(@"select t1.id, t2.name from datas t1 left join texts t2 on t1.id = t2.id", con);
-            SQLiteDataReader creader = dcc.ExecuteReader();
+            SQLiteDataReader reader = dcc.ExecuteReader();
 
-            while (creader.Read())
+            while (reader.Read())
             {
-                string scd = GetFieldString(creader, "id");
-                string sname = GetFieldString(creader, "name");
+                string scd = GetFieldString(reader, "id");
+                string sname = GetFieldString(reader, "name");
                 list1.Add((scd, sname));
             }
 
-            creader.Close();
+            reader.Close();
             con.Close();
 
             

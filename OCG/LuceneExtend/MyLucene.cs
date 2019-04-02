@@ -29,11 +29,17 @@ namespace OCG.LuceneExtend
         {
             if (analyzer == null)
             {
-                
-                Dictionary<string, Analyzer> analyzers = new Dictionary<string, Analyzer>();
-                analyzers.Add("level", new StandardAnalyzer(LuceneVersion));
 
-
+                Dictionary<string, Analyzer> analyzers = new Dictionary<string, Analyzer>
+                {
+                    { "name", new StandardAnalyzer(LuceneVersion) },
+                    { "japName", new StandardAnalyzer(LuceneVersion) },
+                    { "enName", new StandardAnalyzer(LuceneVersion) },
+                    { "effect", new StandardAnalyzer(LuceneVersion) },
+                    { "code", new StandardAnalyzer(LuceneVersion) },
+                    { "cardType", new StandardAnalyzer(LuceneVersion) },
+                    { "link", new StandardAnalyzer(LuceneVersion) }
+                };
                 analyzer = new PerFieldAnalyzerWrapper(new StandardAnalyzer(LuceneVersion), analyzers);
             }
             return analyzer;

@@ -37,22 +37,22 @@ namespace OCG.CardReaders
                 {
                     using (SQLiteCommand dcc = new SQLiteCommand("Select Count(*) as iCount FROM [Datas]", con))
                     {
-                        using (SQLiteDataReader creader = dcc.ExecuteReader())
+                        using (SQLiteDataReader reader = dcc.ExecuteReader())
                         {
-                            creader.Read();
-                            total = GetFieldInt(creader, "iCount");
+                            reader.Read();
+                            total = GetFieldInt(reader, "iCount");
                         }
                     }
                 }
 
                 using (SQLiteCommand dcc = new SQLiteCommand(@"select * from datas t1 left join texts t2 on t1.id = t2.id", con))
                 {
-                    using (SQLiteDataReader creader = dcc.ExecuteReader())
+                    using (SQLiteDataReader reader = dcc.ExecuteReader())
                     {
 
-                        while (creader.Read())
+                        while (reader.Read())
                         {
-                            Card card = ParseCard(creader, cards);
+                            Card card = ParseCard(reader, cards);
                             if (!ht.ContainsKey(card.Name))
                             {
                                 cards.Add(card);

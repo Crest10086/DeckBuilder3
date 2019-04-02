@@ -48,7 +48,7 @@ namespace OCG.Search
                     query = new MatchAllDocsQuery();
                 else
                 {
-                    var parser = new MultiFieldQueryParser(MyLucene.LuceneVersion, MyLucene.GetSearchField(), MyLucene.GetCardAnalyzer(), MyLucene.GetFieldBoosts());
+                    MultiFieldQueryParser parser = new MultiFieldQueryParser(MyLucene.LuceneVersion, MyLucene.GetSearchField(), MyLucene.GetCardAnalyzer(), MyLucene.GetFieldBoosts());
                     query = parser.Parse(queryString);
                 }
 
