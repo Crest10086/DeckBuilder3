@@ -33,6 +33,7 @@ namespace OCG.LuceneExtend
                 Dictionary<string, Analyzer> analyzers = new Dictionary<string, Analyzer>
                 {
                     { "name", new StandardAnalyzer(LuceneVersion) },
+                    { "pyName", new StandardAnalyzer(LuceneVersion) },
                     { "japName", new StandardAnalyzer(LuceneVersion) },
                     { "enName", new StandardAnalyzer(LuceneVersion) },
                     { "effect", new StandardAnalyzer(LuceneVersion) },
@@ -100,6 +101,7 @@ namespace OCG.LuceneExtend
                 fieldBoosts = new Dictionary<string, float>
                 {
                     { "name", 2 },
+                    { "pyName", 1 },
                     { "japName", 2 },
                     { "EnName", 2 },
                     { "effect", 0.5f },

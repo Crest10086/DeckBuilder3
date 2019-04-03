@@ -50,6 +50,7 @@ namespace OCG.CardSavers
             {
                 new NumericDocValuesField("id", card.Id),
                 new TextField("name", card.Name??"", Field.Store.YES),
+                new TextField("pyName", PinYinConverter.GetTotalAndFirstPingYinText(card.Name??""), Field.Store.NO),
                 new TextField("japName", card.JapName??"", Field.Store.YES),
                 new TextField("enName", card.EnName??"", Field.Store.YES),
                 new TextField("effect", card.Effect??"", Field.Store.YES),

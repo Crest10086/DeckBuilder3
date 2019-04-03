@@ -187,9 +187,8 @@ namespace OCG
             var total = topDocs.TotalHits;
             */
 
-            string s = Global.CardLibrary.GetCardByName("青眼白龙").Text;
-            int i = System.Text.Encoding.Default.GetByteCount(s);
-            RichText1.AppendText(i.ToString());
+            string s = MyTools.PinYinConverter.GetTotalAndFirstPingYinText("青眼白龙");
+            RichText1.AppendText(s);
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
