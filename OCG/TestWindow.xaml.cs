@@ -194,7 +194,7 @@ namespace OCG
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            var cards = Global.CardLibrary.Search(SearchText.Text);
+            var cards = Global.CardLibrary.Search(QueryStringTools.Format(SearchText.Text));
             ObservableCollection<Card> cardList = new ObservableCollection<Card>(cards);
             listview1.ItemsSource = cardList;
         }

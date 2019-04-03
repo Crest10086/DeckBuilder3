@@ -20,6 +20,7 @@ namespace OCG.Search
                 {
                     { new Regex(@" (&&?)|(and) ", RegexOptions.Compiled | RegexOptions.IgnoreCase), " AND " },
                     { new Regex(@" (\|\|?)|(or) ", RegexOptions.Compiled | RegexOptions.IgnoreCase), " OR " },
+                    { new Regex(@"\b(!)|(not) ", RegexOptions.Compiled | RegexOptions.IgnoreCase), "NOT " },
                     { new Regex(@"\b(中文|卡)名:", RegexOptions.Compiled), "name:" },
                     { new Regex(@"\b日文名:", RegexOptions.Compiled), "japName:" },
                     { new Regex(@"\b(旧卡|曾用)名:", RegexOptions.Compiled), "oldName:" },
@@ -29,7 +30,7 @@ namespace OCG.Search
                     { new Regex(@"\b效果(说明)?:", RegexOptions.Compiled), "effect:" },
                     { new Regex(@"\b调整:", RegexOptions.Compiled), "adjust:" },
                     { new Regex(@"\b卡包:", RegexOptions.Compiled), "package:" },
-                    { new Regex(@"\b(罕见|稀有)度:", RegexOptions.Compiled), "Infrequence:" },
+                    { new Regex(@"\b(罕见|稀有)度:", RegexOptions.Compiled), "infrequence:" },
                     { new Regex(@"\b攻(击力?)?:", RegexOptions.Compiled), "atk:" },
                     { new Regex(@"\b防(御力?)?:", RegexOptions.Compiled), "def:" },
                     { new Regex(@"\b(星(级|数)?|等级):", RegexOptions.Compiled), "level:" },
@@ -113,24 +114,40 @@ namespace OCG.Search
             return s;
         }
 
-        static Regex regexQuote = new Regex(@"\b(?<field>\w+:)?""?((\d+\-\d+)|(\[\d+ TO \d+\])|(?<string>\w+))""?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        static Regex regexQuote = new Regex(@"\b((?<field>\w+):)?(([\[\{]\d+ TO \d+[\]\}])|(?<quote>""?)(?<keyword>\w+)\k<quote>)([\~\^][\d\.]+)?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static string FormatQuote(string queryString)
         {
             var s = queryString;
-            var matches = regexNum.Matches(s);
+            var matches = regexQuote.Matches(s);
             int count = matches.Count;
             for (int i = 0; i < count; i++)
             {
                 var match = matches[count - 1 - i];
-                var numlength = "";
-                if (match.Groups["string"].Success)
+                if (!match.Groups["keyword"].Success)
+                    continue;
+
+                switch (match.Groups["keyword"].Value)
                 {
-
+                    case "AND":
+                    case "OR":
+                    case "NOT":
+                        continue;
                 }
-            }
-                    
 
-            return null;
+                if (match.Groups["quote"].Success && match.Groups["quote"].Value == "\"")
+                    continue;
+
+                var s2 = $"\"{ match.Groups["keyword"].Value}\"";
+                int index = match.Groups["keyword"].Index;
+                int len = match.Groups["keyword"].Length;
+
+                if (match.Index > 0)
+                    s = s.Substring(0, index) + s2 + s.Substring(index + len, s.Length - index - len);
+                else
+                    s = s2 + s.Substring(index + len, s.Length - index - len);
+            }             
+
+            return s;
         }
 
         public static string Format(string queryString)
@@ -141,6 +158,7 @@ namespace OCG.Search
             var s = CharSetTools.SBCToDBC(queryString.Trim());
             s = FormatName(s);
             s = FormatNum(s);
+            s = FormatQuote(s);
 
             return s;
         }

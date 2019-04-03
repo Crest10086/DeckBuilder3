@@ -38,7 +38,10 @@ namespace OCG.LuceneExtend
                     { "effect", new StandardAnalyzer(LuceneVersion) },
                     { "code", new StandardAnalyzer(LuceneVersion) },
                     { "cardType", new StandardAnalyzer(LuceneVersion) },
-                    { "link", new StandardAnalyzer(LuceneVersion) }
+                    { "link", new StandardAnalyzer(LuceneVersion) },
+                    { "infrequence", new StandardAnalyzer(LuceneVersion) },
+                    { "package", new StandardAnalyzer(LuceneVersion) },
+                    { "adjust", new StandardAnalyzer(LuceneVersion) },
                 };
                 analyzer = new PerFieldAnalyzerWrapper(new StandardAnalyzer(LuceneVersion), analyzers);
             }

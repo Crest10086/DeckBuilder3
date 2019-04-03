@@ -68,6 +68,9 @@ namespace OCG.CardReaders
                     DefValue = GetFieldInt(doc, "def"),
                     Def = GetFieldString(doc, "def2"),
                     Link = GetFieldString(doc, "link"),
+                    Infrequence = GetFieldString(doc, "infrequence"),
+                    Package = GetFieldString(doc, "package"),
+                    Adjust = GetFieldString(doc, "adjust"),
                 };
                 cards.Add(card);
                 invoker?.Invoke(total, count);

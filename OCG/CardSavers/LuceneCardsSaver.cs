@@ -69,6 +69,9 @@ namespace OCG.CardSavers
                 new StringField("def", card.DefValue < 0 ? card.DefValue.ToString() : card.DefValue.ToString().PadLeft(4, '0'), Field.Store.YES),
                 new StoredField("def2", card.Def??""),
                 new TextField("link", card.Link??"", Field.Store.YES),
+                new TextField("infrequence", card.Infrequence??"", Field.Store.YES),
+                new TextField("package", card.Package??"", Field.Store.YES),
+                new TextField("adjust", card.Adjust??"", Field.Store.YES),
             };
             return doc;
         }
