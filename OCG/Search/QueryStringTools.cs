@@ -114,7 +114,7 @@ namespace OCG.Search
             return s;
         }
 
-        static Regex regexQuote = new Regex(@"\b((?<field>\w+):)?(([\[\{]\d+ TO \d+[\]\}])|(?<quote>""?)(?<keyword>\w+)\k<quote>)([\~\^][\d\.]+)?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        static Regex regexQuote = new Regex(@"\b((?<field>\w+):)?(([\[\{]\d+ TO \d+[\]\}])|(?<quote>""?)(?<keyword>\w+)\k<quote>)([\~\^][\d\.]+)*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static string FormatQuote(string queryString)
         {
             var s = queryString;
